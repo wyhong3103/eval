@@ -13,7 +13,6 @@
     "amqplib": "^0.10.4",
     "dockerode": "^4.0.2",
     "dotenv": "^16.4.5",
-    "nodemon": "^3.1.4",
-    "redis": "^4.6.15"
+    "nodemon": "^3.1.4"
   }
 }
