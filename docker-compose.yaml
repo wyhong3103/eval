@@ -10,3 +10,8 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
+  redis:
+    image: redis
+    container_name: redis-container
+    ports:
+      - "6379:6379"
