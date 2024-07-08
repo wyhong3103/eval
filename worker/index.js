@@ -1,8 +1,13 @@
+require("dotenv").config();
 const amqp = require("amqplib/callback_api");
 const Docker = require("dockerode");
 const path = require("path");
-const docker = Docker({});
 const fs = require("fs");
+const redis = require("redis");
+const docker = Docker({});
+const REDIS_URL = process.env.REDIS_URL;
+const redisClient = redis.createClient(REDIS_URL);
+redisClient.connect();
 
 const assetsPath = path.resolve("./assets");
 const RABBITMQ_URL = "amqp://user:password@localhost:5672";
@@ -25,7 +30,8 @@ amqp.connect(RABBITMQ_URL, (err, connection) => {
     channel.consume(
       queue,
       async (msg) => {
-        const { input, code } = JSON.parse(msg.content.toString());
+        console.log(`Message received.`);
+        const { id, input, code } = JSON.parse(msg.content.toString());
 
         fs.writeFileSync(assetsPath + "/input.txt", input, "utf8");
         fs.writeFileSync(assetsPath + "/main.cpp", code, "utf8");
@@ -50,13 +56,23 @@ amqp.connect(RABBITMQ_URL, (err, connection) => {
 
         const statusCode = output.StatusCode;
 
+        const ret = {
+          id,
+          output: "",
+          // 1 or 0, 1 is OK, 0 is BAD
+          status: 1 - Math.min(1, statusCode),
+        };
+
         if (statusCode === 124) {
-          console.log("Time limit exceeded!");
+          ret.output = "Time limit exceeded.";
+          redisClient.publish("task:notification", JSON.stringify(ret));
         } else if (statusCode === 1) {
-          console.log("Something went wrong with your code!");
+          ret.output = "Something went wrong with your code.";
+          redisClient.publish("task:notification", JSON.stringify(ret));
         } else {
           const output = fs.readFileSync(assetsPath + "/output.txt", "utf8");
-          console.log(output);
+          ret.output = output;
+          redisClient.publish("task:notification", JSON.stringify(ret));
         }
       },
       {
