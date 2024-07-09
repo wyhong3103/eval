@@ -3,12 +3,36 @@ import cpp from "highlight.js/lib/languages/cpp";
 import "highlight.js/styles/base16/solarized-light.css";
 import Editor from "react-simple-code-editor";
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 hljs.registerLanguage("cpp", cpp);
 
+const socket = io("http://localhost:6969/");
+
 function App() {
-  const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
+  const [code, setCode] = useState(
+    `#include <iostream> \n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}`
+  );
+  const [running, setRunning] = useState(false);
   const [output, setOutput] = useState("Please run your code.");
+  const [ok, setOK] = useState(1);
+  const [input, setInput] = useState("1 1");
+
+  const submit = () => {
+    socket.emit("submit", JSON.stringify({ code, input }));
+    setRunning(true);
+    setOutput("Running...");
+    setOK(1);
+  };
+
+  useEffect(() => {
+    socket.on("result", (output, status) => {
+      setOutput(output);
+      setOK(status);
+      setRunning(false);
+    });
+  }, [socket]);
+
   return (
     <div className="App">
       <div className="heading">
@@ -32,10 +56,31 @@ function App() {
             />
           </div>
           <div className="submit-container">
-            <div className="submit-btn">run</div>
+            <div
+              className={`submit-btn ${!running ? "enabled" : "disabled"}`}
+              onClick={!running ? submit : null}
+            >
+              run
+            </div>
           </div>
         </div>
-        <div className="output">{output}</div>
+        <div className="right-container">
+          <div className="section-title">input</div>
+          <textarea
+            className="input"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <div className="section-title">output</div>
+          <textarea
+            className="output"
+            style={{
+              color: ok ? "black" : "red",
+            }}
+            value={output}
+            disabled
+          />
+        </div>
       </div>
     </div>
   );
