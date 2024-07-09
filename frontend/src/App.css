@@ -44,7 +44,7 @@
 }
 
 .submit-container {
-  padding: 5px;
+  /* padding: 5px; */
   border-top: 1px solid black;
   display: flex;
   flex-direction: row;
@@ -59,8 +59,8 @@
   font-family: "Fira code", "Fira Mono", monospace;
   background-color: black;
   font-size: 12px;
-  padding: 5px 15px;
-  border-radius: 5px;
+  padding: 7px 15px;
+  /* border-radius: 5px; */
   color: white;
   display: flex;
   justify-content: center;
