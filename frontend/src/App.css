@@ -1,0 +1,107 @@
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+HU:wght@100..400&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.App {
+  background-color: #fdf6e3;
+}
+
+.heading {
+  padding: 10px;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+}
+
+.heading h1 {
+  font-family: "Playwrite HU", cursive;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  border-top: 1px solid black;
+  height: 90vh;
+}
+
+.left-container {
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-container {
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.editor:focus-visible {
+  outline: none;
+}
+
+.submit-container {
+  padding: 5px;
+  border-top: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.submit-btn {
+  font-family: "Fira code", "Fira Mono", monospace;
+  background-color: black;
+  font-size: 12px;
+  padding: 5px 15px;
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.8s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn:hover {
+  cursor: pointer;
+}
+
+.submit-btn::before,
+.submit-btn::after {
+  position: absolute;
+  display: block;
+  content: "";
+  width: 100%;
+  height: 100%;
+  left: -100%;
+  clip-path: polygon(10% 0, 70% 0, 90% 100%, 30% 100%);
+  background-color: rgba(255, 255, 255, 0.6);
+  transition: all 300ms ease;
+}
+
+.submit-btn:hover::after {
+  left: 100%;
+}
+
+.output {
+  width: 50vw;
+  font-family: "Fira code", "Fira Mono", monospace;
+  font-size: 12px;
+  border-left: 1px solid black;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: #00000011;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #555;
+}
