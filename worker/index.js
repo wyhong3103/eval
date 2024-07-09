@@ -26,8 +26,8 @@ amqp.connect(RABBITMQ_URL, (err, connection) => {
     channel.consume(
       task_queue,
       async (msg) => {
-        console.log(`Message received.`);
         const { id, input, code } = JSON.parse(msg.content.toString());
+        console.log(`${id}: Message received.`);
 
         fs.writeFileSync(assetsPath + "/input.txt", input, "utf8");
         fs.writeFileSync(assetsPath + "/main.cpp", code, "utf8");

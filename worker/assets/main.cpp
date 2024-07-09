@@ -1,2 +1,8 @@
 #include <iostream> 
-int main() {while(true); return 0;}
+
+int main() {
+    int a, b;
+    std::cin >> a >> b;
+    std::cout << a-b;
+    return 0;
+}
