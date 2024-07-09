@@ -6,7 +6,7 @@ const fs = require("fs");
 const docker = Docker({});
 
 const assetsPath = path.resolve("./assets");
-const RABBITMQ_URL = "amqp://user:password@localhost:5672";
+const RABBITMQ_URL = process.env.RABBITMQ_URL;
 const task_queue = process.env.QUEUE_NAME;
 const rpc_queue = process.env.RPC_QUEUE_NAME;
 
