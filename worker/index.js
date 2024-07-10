@@ -62,7 +62,7 @@ amqp.connect(RABBITMQ_URL, (err, connection) => {
         if (statusCode === 124) {
           ret.output = "Time limit exceeded.";
         } else if (statusCode === 1) {
-          ret.output = "Something went wrong with your code.";
+          ret.output = "Something is wrong.";
         } else {
           const output = fs.readFileSync(assetsPath + "/output.txt", "utf8");
           ret.output = output;
